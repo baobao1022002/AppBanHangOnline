@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -32,7 +33,10 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import vn.name.appbanhang.R;
 import vn.name.appbanhang.adapter.LoaiSpAdapter;
+import vn.name.appbanhang.adapter.SanPhamMoiAdapter;
 import vn.name.appbanhang.model.LoaiSp;
+import vn.name.appbanhang.model.SanPhamMoi;
+import vn.name.appbanhang.model.SanPhamMoiModel;
 import vn.name.appbanhang.retrofit.ApiBanHang;
 import vn.name.appbanhang.retrofit.RetrofitClient;
 import vn.name.appbanhang.utils.Utils;
@@ -49,31 +53,55 @@ public class MainActivity extends AppCompatActivity {
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     ApiBanHang apiBanHang;
+    List<SanPhamMoi> mangSpMoi;
+    SanPhamMoiAdapter spAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        apiBanHang=  RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
+        apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
         Anhxa();
         ActionBar();
-        if(isConnected(this)){
+        if (isConnected(this)) {
             Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_LONG).show();
             ActionViewFlipper();
             getLoaiSanPham();
-        }else{
+            getSpMoi();
+        } else {
             Toast.makeText(getApplicationContext(), "không có internet", Toast.LENGTH_LONG).show();
         }
     }
+
+    private void getSpMoi() {
+        compositeDisposable.add(apiBanHang.getSpMoi()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        sanPhamMoiModel -> {
+                            if (sanPhamMoiModel.isSuccess()) {
+                                mangSpMoi = sanPhamMoiModel.getResult();
+
+                                spAdapter = new SanPhamMoiAdapter(getApplicationContext(), mangSpMoi);
+                                recyclerViewManHinhChinh.setAdapter(spAdapter);
+                            }
+                        },
+                        throwable -> {
+                            Toast.makeText(getApplicationContext(), "Không kết nối được với sever" + throwable.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                ));
+    }
+
     private void getLoaiSanPham() {
         compositeDisposable.add(apiBanHang.getLoaiSp()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         loaiSpModel -> {
-                            if(loaiSpModel.isSuccess()){
+                            if (loaiSpModel.isSuccess()) {
                                 mangLoaiSp = loaiSpModel.getResult();
                                 //khoi tao adapter
-                                loaiSpAdapter =new LoaiSpAdapter(getApplicationContext(),mangLoaiSp);
+                                loaiSpAdapter = new LoaiSpAdapter(getApplicationContext(), mangLoaiSp);
                                 listViewManHinhChinh.setAdapter(loaiSpAdapter);
                             }
                         }
@@ -83,25 +111,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void ActionViewFlipper() {
-        List<String> mangquangcao=new ArrayList<>();
+        List<String> mangquangcao = new ArrayList<>();
         mangquangcao.add("http://mauweb.monamedia.net/thegioididong/wp-content/uploads/2017/12/banner-Le-hoi-phu-kien-800-300.png");
         mangquangcao.add("http://mauweb.monamedia.net/thegioididong/wp-content/uploads/2017/12/banner-HC-Tra-Gop-800-300.png");
         mangquangcao.add("http://mauweb.monamedia.net/thegioididong/wp-content/uploads/2017/12/banner-big-ky-nguyen-800-300.jpg");
-        for (int i=0; i<mangquangcao.size();i++){
-            ImageView imageView=new ImageView(getApplicationContext());
+        for (int i = 0; i < mangquangcao.size(); i++) {
+            ImageView imageView = new ImageView(getApplicationContext());
             Glide.with(getApplicationContext()).load(mangquangcao.get(i)).into(imageView);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             viewFlipper.addView(imageView);
         }
         viewFlipper.setFlipInterval(3000);
         viewFlipper.setAutoStart(true);
-        Animation slide_in= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.slide_in_right);
-        Animation slide_out= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.slide_out_rigth);
+        Animation slide_in = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_right);
+        Animation slide_out = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_rigth);
         viewFlipper.setInAnimation(slide_in);
         viewFlipper.setOutAnimation(slide_out);
 
     }
-    private void ActionBar(){
+
+    private void ActionBar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationIcon(android.R.drawable.ic_menu_sort_by_size);
@@ -112,28 +141,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     private void Anhxa() {
-        toolbar=findViewById(R.id.toobarmanhinhchinh);
-        viewFlipper=findViewById(R.id.viewlipper);
-        recyclerViewManHinhChinh=findViewById(R.id.recycleView);
-        listViewManHinhChinh=findViewById(R.id.listviewmanhinhchinh);
+        toolbar = findViewById(R.id.toobarmanhinhchinh);
+        viewFlipper = findViewById(R.id.viewlipper);
+        recyclerViewManHinhChinh = findViewById(R.id.recycleView);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
+        recyclerViewManHinhChinh.setLayoutManager(layoutManager);
+        recyclerViewManHinhChinh.setHasFixedSize(true);
+        listViewManHinhChinh = findViewById(R.id.listviewmanhinhchinh);
         navigationView = findViewById(R.id.navigationview);
-        drawerLayout=findViewById(R.id.drawerlayout);
+        drawerLayout = findViewById(R.id.drawerlayout);
         //khoi tao list
         mangLoaiSp = new ArrayList<>();
+        mangSpMoi = new ArrayList<>();
 
     }
 
-    private boolean isConnected (Context context){
+    private boolean isConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
         NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        if((wifi != null && wifi.isConnected()) || (mobile != null && mobile.isConnected()) ){
+        if ((wifi != null && wifi.isConnected()) || (mobile != null && mobile.isConnected())) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
+
     @Override
     protected void onDestroy() {
         compositeDisposable.clear();
