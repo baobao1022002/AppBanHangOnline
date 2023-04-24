@@ -19,6 +19,9 @@
             android:name=".activity.LaptopActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.ChiTietActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.DienThoaiActivity"
             android:exported="false" />
         <activity
