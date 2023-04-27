@@ -1,11 +1,10 @@
 package vn.name.appbanhang.utils;
 
+import java.util.List;
+
+import vn.name.appbanhang.model.GioHang;
+
 public class Utils {
-    public static final String BASE_URL="http://192.168.1.5/banhang/";
-//192.168.103.152
-// 192.168.111.152
-//    192.168.139.1
-// 192.168.190.1
-//    192.168.50.126
-//192.168.89.126
+    public static final String BASE_URL="http://192.168.97.152/banhang/";
+    public static List<GioHang> manggiohang;
 }
