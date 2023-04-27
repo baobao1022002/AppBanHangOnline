@@ -182,6 +182,10 @@ public class MainActivity extends AppCompatActivity {
         //khoi tao list
         mangLoaiSp = new ArrayList<>();
         mangSpMoi = new ArrayList<>();
+        if(Utils.manggiohang==null){
+            Utils.manggiohang=new ArrayList<>();
+
+        }
 
     }
 
