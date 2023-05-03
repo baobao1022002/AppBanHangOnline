@@ -40,4 +40,10 @@ public interface ApiBanHang {
             @Field("email") String email,
             @Field("pass") String pass
     );
+
+    @POST("reset.php")
+    @FormUrlEncoded
+    Observable<UserModel> resetPass(
+            @Field("email") String email
+    );
 }
