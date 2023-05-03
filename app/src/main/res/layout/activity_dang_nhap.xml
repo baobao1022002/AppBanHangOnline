@@ -66,6 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <LinearLayout
+        android:id="@+id/line6"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -89,5 +90,15 @@
 
 
     </LinearLayout>
+    <TextView
+        app:layout_constraintTop_toBottomOf="@id/line6"
+        android:layout_marginTop="15dp"
+        android:text="Quên mật khẩu"
+        android:textColor="@color/teal_200"
+        android:textSize="20sp"
+        android:id="@+id/txtresetpass"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

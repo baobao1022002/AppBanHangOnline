@@ -21,7 +21,7 @@ import vn.name.appbanhang.retrofit.RetrofitClient;
 import vn.name.appbanhang.utils.Utils;
 
 public class DangNhapActivity extends AppCompatActivity {
-    TextView txtdangki;
+    TextView txtdangki,txtresetpass;
     EditText email, pass;
     AppCompatButton btndangnhap;
     ApiBanHang apiBanHang;
@@ -40,6 +40,14 @@ public class DangNhapActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), DangKiActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        txtresetpass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ResetPassActivity.class);
                 startActivity(intent);
             }
         });
@@ -84,6 +92,7 @@ public class DangNhapActivity extends AppCompatActivity {
         Paper.init(this);
         apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
         txtdangki = findViewById(R.id.txtdangki);
+        txtresetpass = findViewById(R.id.txtresetpass);
         email = findViewById(R.id.email);
         pass = findViewById(R.id.pass);
         btndangnhap = findViewById(R.id.btndangnhap);
