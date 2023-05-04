@@ -15,7 +15,9 @@
         android:theme="@style/Theme.AppBanHang"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".activity.ThanhToanActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.ResetPassActivity"
             android:exported="false" />
