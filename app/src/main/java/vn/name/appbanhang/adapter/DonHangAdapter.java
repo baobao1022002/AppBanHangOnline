@@ -17,6 +17,7 @@ import vn.name.appbanhang.R;
 import vn.name.appbanhang.model.DonHang;
 
 public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.MyViewHolder> {
+    private RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
     Context context;
     List<DonHang> listdonhang;
 
@@ -43,6 +44,11 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.MyViewHo
         );
         layoutManager.setInitialPrefetchItemCount(donHang.getItem().size());
         //adapter chitiet
+        ChitietAdapter chitietAdapter = new ChitietAdapter(context, donHang.getItem());
+        holder.reChitiet.setLayoutManager(layoutManager);
+        holder.reChitiet.setAdapter(chitietAdapter);
+        holder.reChitiet.setRecycledViewPool(viewPool);
+
     }
 
     @Override
