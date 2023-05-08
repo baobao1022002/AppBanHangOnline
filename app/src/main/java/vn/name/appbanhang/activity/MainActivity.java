@@ -61,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
     SanPhamMoiAdapter spAdapter;
     NotificationBadge badge;
     FrameLayout frameLayout;
+    ImageView imgsearch;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         listViewManHinhChinh.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch(i){
+                switch (i) {
                     case 0:
                         Intent trangchu = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(trangchu);
@@ -177,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void Anhxa() {
+        imgsearch = findViewById(R.id.imgsearch);
         toolbar = findViewById(R.id.toobarmanhinhchinh);
         viewFlipper = findViewById(R.id.viewlipper);
         recyclerViewManHinhChinh = findViewById(R.id.recycleView);
@@ -191,26 +195,31 @@ public class MainActivity extends AppCompatActivity {
         //khoi tao list
         mangLoaiSp = new ArrayList<>();
         mangSpMoi = new ArrayList<>();
-        if(Utils.manggiohang==null){
-            Utils.manggiohang=new ArrayList<>();
+        if (Utils.manggiohang == null) {
+            Utils.manggiohang = new ArrayList<>();
 
         } else {
-            int totalItem=0;
-            for (int i=0;i<Utils.manggiohang.size();i++){
-                totalItem =totalItem+Utils.manggiohang.get(i).getSoluong();
+            int totalItem = 0;
+            for (int i = 0; i < Utils.manggiohang.size(); i++) {
+                totalItem = totalItem + Utils.manggiohang.get(i).getSoluong();
             }
             badge.setText(String.valueOf(totalItem));
         }
         frameLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent giohang  = new Intent(getApplicationContext(), GioHangActivity.class);
+                Intent giohang = new Intent(getApplicationContext(), GioHangActivity.class);
                 startActivity(giohang);
             }
         });
 
-
-
+        imgsearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
     }
@@ -218,9 +227,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        int totalItem=0;
-        for (int i=0;i<Utils.manggiohang.size();i++){
-            totalItem =totalItem+Utils.manggiohang.get(i).getSoluong();
+        int totalItem = 0;
+        for (int i = 0; i < Utils.manggiohang.size(); i++) {
+            totalItem = totalItem + Utils.manggiohang.get(i).getSoluong();
         }
         badge.setText(String.valueOf(totalItem));
     }
