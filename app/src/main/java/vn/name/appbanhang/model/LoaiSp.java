@@ -5,8 +5,7 @@ public class LoaiSp {
     String tensanpham;
     String hinhanh;
 
-    public LoaiSp(int id, String tensanpham, String hinhanh) {
-        this.id = id;
+    public LoaiSp(String tensanpham, String hinhanh) {
         this.tensanpham = tensanpham;
         this.hinhanh = hinhanh;
     }

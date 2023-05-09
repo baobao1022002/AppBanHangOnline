@@ -32,6 +32,7 @@ import com.nex3z.notificationbadge.NotificationBadge;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.paperdb.Paper;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -41,6 +42,7 @@ import vn.name.appbanhang.adapter.SanPhamMoiAdapter;
 import vn.name.appbanhang.model.LoaiSp;
 import vn.name.appbanhang.model.SanPhamMoi;
 import vn.name.appbanhang.model.SanPhamMoiModel;
+import vn.name.appbanhang.model.User;
 import vn.name.appbanhang.retrofit.ApiBanHang;
 import vn.name.appbanhang.retrofit.RetrofitClient;
 import vn.name.appbanhang.utils.Utils;
@@ -69,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
+        Paper.init(this);
+        if(Paper.book().read("user") != null ){
+            User user = Paper.book().read("user");
+            Utils.user_current = user;
+        }
         Anhxa();
         ActionBar();
         if (isConnected(this)) {
@@ -105,6 +112,12 @@ public class MainActivity extends AppCompatActivity {
                         Intent donhang = new Intent(getApplicationContext(), XemDonActivity.class);
                         startActivity(donhang);
                         break;
+                    case 6:
+                        Paper.book().delete("user");
+                        Intent dangnhap = new Intent(getApplicationContext(), DangNhapActivity.class);
+                        startActivity(dangnhap);
+                        finish();
+                        break;
                 }
             }
         });
@@ -137,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                         loaiSpModel -> {
                             if (loaiSpModel.isSuccess()) {
                                 mangLoaiSp = loaiSpModel.getResult();
+                                mangLoaiSp.add(new LoaiSp("Đăng xuất",""));
                                 //khoi tao adapter
                                 loaiSpAdapter = new LoaiSpAdapter(getApplicationContext(), mangLoaiSp);
                                 listViewManHinhChinh.setAdapter(loaiSpAdapter);
