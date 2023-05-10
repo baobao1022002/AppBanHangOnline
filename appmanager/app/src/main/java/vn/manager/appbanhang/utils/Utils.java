@@ -1,10 +1,10 @@
-package vn.name.appbanhang.utils;
+package vn.manager.appbanhang.utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import vn.name.appbanhang.model.GioHang;
-import vn.name.appbanhang.model.User;
+import vn.manager.appbanhang.model.GioHang;
+import vn.manager.appbanhang.model.User;
 
 public class Utils {
     public static final String BASE_URL="http://192.168.1.6/banhang/";
