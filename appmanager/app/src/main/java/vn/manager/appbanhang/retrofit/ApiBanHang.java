@@ -7,6 +7,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import vn.manager.appbanhang.model.DonHangModel;
 import vn.manager.appbanhang.model.LoaiSpModel;
+import vn.manager.appbanhang.model.MessageModel;
 import vn.manager.appbanhang.model.SanPhamMoiModel;
 import vn.manager.appbanhang.model.UserModel;
 
@@ -68,6 +69,16 @@ public interface ApiBanHang {
     @FormUrlEncoded
     Observable<SanPhamMoiModel> search(
             @Field("search") String search
+    );
+
+    @POST("insertsp.php")
+    @FormUrlEncoded
+    Observable<MessageModel> insertSp(
+            @Field("tensp") String tensp,
+            @Field("gia") String gia,
+            @Field("hinhanh") String hinhanh,
+            @Field("mota") String mota,
+            @Field("loai") int id
     );
 
 }

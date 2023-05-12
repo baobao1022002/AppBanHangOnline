@@ -16,10 +16,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".QuanLiActivity"
+            android:name="vn.manager.appbanhang.activity.ThemSPActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name="vn.manager.appbanhang.activity.QuanLiActivity"
+            android:exported="false" />
+        <activity
+            android:name="vn.manager.appbanhang.activity.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,37 +31,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SearchActivity"
+            android:name="vn.manager.appbanhang.activity.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".XemDonActivity"
+            android:name="vn.manager.appbanhang.activity.XemDonActivity"
             android:exported="false" />
         <activity
-            android:name=".ThanhToanActivity"
+            android:name="vn.manager.appbanhang.activity.ThanhToanActivity"
             android:exported="false" />
         <activity
-            android:name=".ResetPassActivity"
+            android:name="vn.manager.appbanhang.activity.ResetPassActivity"
             android:exported="false" />
         <activity
-            android:name=".DangNhapActivity"
-            android:exported="true"></activity>
+            android:name="vn.manager.appbanhang.activity.DangNhapActivity"
+            android:exported="true" />
         <activity
-            android:name=".DangKiActivity"
+            android:name="vn.manager.appbanhang.activity.DangKiActivity"
             android:exported="false" />
         <activity
-            android:name=".GioHangActivity"
+            android:name="vn.manager.appbanhang.activity.GioHangActivity"
             android:exported="false" />
         <activity
-            android:name=".LaptopActivity"
+            android:name="vn.manager.appbanhang.activity.LaptopActivity"
             android:exported="false" />
         <activity
-            android:name=".ChiTietActivity"
+            android:name="vn.manager.appbanhang.activity.ChiTietActivity"
             android:exported="false" />
         <activity
-            android:name=".DienThoaiActivity"
+            android:name="vn.manager.appbanhang.activity.DienThoaiActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name="vn.manager.appbanhang.activity.MainActivity"
             android:exported="true" />
     </application>
 
