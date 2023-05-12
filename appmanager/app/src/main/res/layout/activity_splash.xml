@@ -5,6 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="vn.manager.appbanhang.activity.SplashActivity">
+    <ImageView
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_slide"
+        android:adjustViewBounds="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <TextView
         android:id="@+id/splashtext"
         app:layout_constraintTop_toTopOf="parent"
