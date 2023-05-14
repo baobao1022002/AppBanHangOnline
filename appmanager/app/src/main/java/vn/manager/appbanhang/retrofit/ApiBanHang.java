@@ -1,10 +1,15 @@
 package vn.manager.appbanhang.retrofit;
 
 import io.reactivex.rxjava3.core.Observable;
+
+import okhttp3.MultipartBody;
+import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import vn.manager.appbanhang.model.DonHangModel;
 import vn.manager.appbanhang.model.LoaiSpModel;
 import vn.manager.appbanhang.model.MessageModel;
@@ -80,5 +85,9 @@ public interface ApiBanHang {
             @Field("mota") String mota,
             @Field("loai") int id
     );
+
+    @Multipart
+    @POST("upload.php")
+    Call<MessageModel> uploadFile(@Part MultipartBody.Part file);
 
 }
