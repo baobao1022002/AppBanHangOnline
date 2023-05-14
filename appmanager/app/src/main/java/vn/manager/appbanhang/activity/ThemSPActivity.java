@@ -34,6 +34,7 @@ import okhttp3.RequestBody;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vn.manager.appbanhang.model.MessageModel;
+import vn.manager.appbanhang.model.SanPhamMoi;
 import vn.manager.appbanhang.retrofit.ApiBanHang;
 import vn.manager.appbanhang.retrofit.RetrofitClient;
 import vn.manager.appbanhang.utils.Utils;
@@ -47,6 +48,8 @@ public class ThemSPActivity extends AppCompatActivity {
     ApiBanHang apiBanHang;
     CompositeDisposable compositeDisposable=new CompositeDisposable();
     String mediaPath;
+    SanPhamMoi sanPhamSua;
+    boolean flag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,26 @@ public class ThemSPActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         initView();
         initData();
+
+        Intent intent = getIntent();
+        sanPhamSua = (SanPhamMoi) intent.getSerializableExtra("sua");
+        if(sanPhamSua == null){
+            //them moi
+            flag = false;
+        } else {
+            //sua
+            flag = true;
+            binding.btnthem.setText("Sửa sản phẩm");
+            //show data
+            binding.mota.setText(sanPhamSua.getMota());
+            binding.giasp.setText(sanPhamSua.getGiasp());
+            binding.tensp.setText(sanPhamSua.getTensp());
+            binding.hinhanh.setText(sanPhamSua.getHinhanh());
+            binding.spinnerLoai.setSelection(sanPhamSua.getLoai());
+
+
+        }
+
     }
 
     private void initData() {
@@ -80,7 +103,11 @@ public class ThemSPActivity extends AppCompatActivity {
         binding.btnthem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                themsanpham();
+                if(flag == false) {
+                    themsanpham();
+                } else {
+                    suaSanPham();
+                }
             }
         });
         binding.imgcamera.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +120,34 @@ public class ThemSPActivity extends AppCompatActivity {
                         .start();
             }
         });
+    }
+
+    private void suaSanPham() {
+        String str_ten=binding.tensp.getText().toString().trim();
+        String str_gia=binding.giasp.getText().toString().trim();
+        String str_mota=binding.mota.getText().toString().trim();
+        String str_hinhanh=binding.hinhanh.getText().toString().trim();
+        if(TextUtils.isEmpty(str_ten) || TextUtils.isEmpty(str_gia) || TextUtils.isEmpty(str_mota) || TextUtils.isEmpty(str_hinhanh) ||loai==0){
+            Toast.makeText(getApplicationContext(), "Vui lòng nhập đủ thông tin", Toast.LENGTH_SHORT).show();
+        }else{
+            compositeDisposable.add(apiBanHang.updatesp(str_ten,str_gia,str_hinhanh,str_mota,loai,sanPhamSua.getId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            messageModel -> {
+                                if(messageModel.isSuccess()){
+                                    Toast.makeText(getApplicationContext(),messageModel.getMessage(),Toast.LENGTH_LONG).show();
+                                }else{
+                                    Toast.makeText(getApplicationContext(),messageModel.getMessage(),Toast.LENGTH_LONG).show();
+                                }
+                            },
+                            throwable -> {
+                                Toast.makeText(getApplicationContext(), throwable.getMessage(), Toast.LENGTH_LONG ).show();
+                            }
+
+
+                    ));
+        }
     }
 
     private void themsanpham() {
