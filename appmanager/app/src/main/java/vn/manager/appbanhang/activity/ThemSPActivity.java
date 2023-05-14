@@ -1,15 +1,25 @@
 package vn.manager.appbanhang.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+
+import com.github.dhaval2404.imagepicker.ImagePicker;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +27,13 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import retrofit2.Call;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Callback;
+import retrofit2.Response;
+import vn.manager.appbanhang.model.MessageModel;
 import vn.manager.appbanhang.retrofit.ApiBanHang;
 import vn.manager.appbanhang.retrofit.RetrofitClient;
 import vn.manager.appbanhang.utils.Utils;
@@ -29,6 +46,7 @@ public class ThemSPActivity extends AppCompatActivity {
     ActivityThemspBinding binding;
     ApiBanHang apiBanHang;
     CompositeDisposable compositeDisposable=new CompositeDisposable();
+    String mediaPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +83,16 @@ public class ThemSPActivity extends AppCompatActivity {
                 themsanpham();
             }
         });
+        binding.imgcamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePicker.with(ThemSPActivity.this)
+                        .crop()	    			//Crop image(Optional), Check Customization for more option
+                        .compress(1024)			//Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                        .start();
+            }
+        });
     }
 
     private void themsanpham() {
@@ -95,6 +123,59 @@ public class ThemSPActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mediaPath = data.getDataString();
+        uploadMultipleFiles();
+        Log.d("log", "onActivityResult: "+ mediaPath);
+    }
+
+    private String getPath(Uri uri){
+        String result;
+        Cursor cursor = getContentResolver().query(uri,null,null,null,null);
+        if(cursor == null){
+            result = uri.getPath();
+        }else {
+            cursor.moveToFirst();
+            int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(index);
+            cursor.close();
+        }
+        return result;
+    }
+
+
+    private void uploadMultipleFiles() {
+
+        Uri uri = Uri.parse(mediaPath);
+
+        File file = new File(getPath(uri));
+
+        RequestBody requestBody1 = RequestBody.create(MediaType.parse("*/*"), file);
+        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", file.getName(), requestBody1);
+        Call<MessageModel> call = apiBanHang.uploadFile(fileToUpload1);
+        call.enqueue(new Callback< MessageModel >() {
+            @Override
+            public void onResponse(Call < MessageModel > call, Response< MessageModel > response) {
+                MessageModel serverResponse = response.body();
+                if (serverResponse != null) {
+                    if (serverResponse.isSuccess()) {
+                        binding.hinhanh.setText(serverResponse.getName());
+                    } else {
+                        Toast.makeText(getApplicationContext(), serverResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Log.v("Response", serverResponse.toString());
+                }
+            }
+            @Override
+            public void onFailure(Call < MessageModel > call, Throwable t) {
+                Log.d("log", t.getMessage());
+            }
+        });
+    }
+
 
     private void initView() {
         spinner=findViewById(R.id.spinner_loai);
@@ -105,4 +186,5 @@ public class ThemSPActivity extends AppCompatActivity {
         compositeDisposable.clear();
         super.onDestroy();
     }
+
 }
