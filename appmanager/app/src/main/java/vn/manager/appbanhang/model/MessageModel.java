@@ -3,6 +3,13 @@ package vn.manager.appbanhang.model;
 public class MessageModel {
     boolean success;
     String message;
+    String name;
+
+    public MessageModel(boolean success, String message, String name) {
+        this.success = success;
+        this.message = message;
+        this.name = name;
+    }
 
     public boolean isSuccess() {
         return success;
@@ -18,5 +25,13 @@ public class MessageModel {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
