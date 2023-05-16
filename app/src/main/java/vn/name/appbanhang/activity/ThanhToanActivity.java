@@ -7,8 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.method.CharacterPickerDialog;
-import android.util.JsonReader;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -19,14 +18,21 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Scheduler;
+
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import vn.name.appbanhang.R;
+import vn.name.appbanhang.model.NotiSendData;
+import vn.name.appbanhang.retrofit.APIPushNotification;
 import vn.name.appbanhang.retrofit.ApiBanHang;
 import vn.name.appbanhang.retrofit.RetrofitClient;
+import vn.name.appbanhang.retrofit.RetrofitClientNoti;
+
 import vn.name.appbanhang.utils.Utils;
 
 public class ThanhToanActivity extends AppCompatActivity {
@@ -37,8 +43,10 @@ public class ThanhToanActivity extends AppCompatActivity {
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     ;
     ApiBanHang apiBanHang;
+    APIPushNotification apiPushNotification;
     long tongtien;
     int totalItem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +98,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
                                     userModel -> {
+                                        pushNotiToUser();
                                         Toast.makeText(getApplicationContext(), "Thanh cong", Toast.LENGTH_SHORT).show();
                                         Utils.mangmuahang.clear();
                                     },
@@ -104,6 +113,26 @@ public class ThanhToanActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void pushNotiToUser() {
+        String token ="f_K9XPusQcKrc3vCBc5VgN:APA91bHE8Za1Cc_CsFPWh5Yo4nRRSMW86aEldQ9dXMm54xUPXjJaqFX545GMSP1nDjSVVMtjQLPyu8ZLvOhTZHHAVIT5-zoNA5HgguLQfKGVrJlCzbOx51wSzJ2buXKK5JZRIaeoGPoW";
+        Map<String,String> data = new HashMap<>();
+        data.put("title","Thong bao khach hang");
+        data.put("body", "Don hang moi vua duoc dat, kiem tra don hang");
+        NotiSendData notiSendData = new NotiSendData(token,data);
+        apiPushNotification = RetrofitClientNoti.getInstance().create(APIPushNotification.class);
+        compositeDisposable.add(apiPushNotification.sendNotification(notiSendData)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        notiResponse -> {
+
+                        },
+                        throwable -> {
+                            Log.d("logg",throwable.getMessage());
+                        }
+                ));
     }
 
     private void initView() {

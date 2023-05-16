@@ -13,6 +13,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import vn.name.appbanhang.model.DonHangModel;
 import vn.name.appbanhang.model.LoaiSpModel;
+import vn.name.appbanhang.model.MessageModel;
 import vn.name.appbanhang.model.SanPhamMoiModel;
 import vn.name.appbanhang.model.UserModel;
 import vn.name.appbanhang.utils.Utils;
@@ -37,7 +38,14 @@ public interface ApiBanHang {
             @Field("email") String email,
             @Field("pass") String pass,
             @Field("username") String username,
-            @Field("mobile") String mobile
+            @Field("mobile") String mobile,
+            @Field("uid") String uid
+    );
+    @POST("updatetoken.php")
+    @FormUrlEncoded
+    Observable<MessageModel> updateToken(
+            @Field("id") int id,
+            @Field("token") String token
     );
 
     @POST("dangnhap.php")
