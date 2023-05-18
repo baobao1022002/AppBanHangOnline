@@ -23,12 +23,12 @@ public interface ApiBanHang {
     @GET("getspmoi.php")
     Observable<SanPhamMoiModel> getSpMoi();
 
-   @POST("chitiet.php")
-   @FormUrlEncoded
-   Observable<SanPhamMoiModel> getSanPham(
-          @Field("page") int page,
-          @Field("loai") int loai
-   );
+    @POST("chitiet.php")
+    @FormUrlEncoded
+    Observable<SanPhamMoiModel> getSanPham(
+            @Field("page") int page,
+            @Field("loai") int loai
+    );
 
     @POST("dangki.php")
     @FormUrlEncoded
@@ -94,22 +94,29 @@ public interface ApiBanHang {
             @Field("loai") int id
     );
 
- @POST("updatesp.php")
- @FormUrlEncoded
- Observable<MessageModel> updatesp(
-         @Field("tensp") String tensp,
-         @Field("gia") String gia,
-         @Field("hinhanh") String hinhanh,
-         @Field("mota") String mota,
-         @Field("loai") int idloai,
-         @Field("id") int id
- );
+    @POST("updatesp.php")
+    @FormUrlEncoded
+    Observable<MessageModel> updatesp(
+            @Field("tensp") String tensp,
+            @Field("gia") String gia,
+            @Field("hinhanh") String hinhanh,
+            @Field("mota") String mota,
+            @Field("loai") int idloai,
+            @Field("id") int id
+    );
 
     @POST("updatetoken.php")
     @FormUrlEncoded
     Observable<MessageModel> updateToken(
             @Field("id") int id,
             @Field("token") String token
+    );
+
+    @POST("updateorder.php")
+    @FormUrlEncoded
+    Observable<MessageModel> updateOrder(
+            @Field("id") int id,
+            @Field("trangthai") int trangthai
     );
 
     @Multipart
