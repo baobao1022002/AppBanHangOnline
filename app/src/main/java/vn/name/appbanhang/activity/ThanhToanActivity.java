@@ -116,21 +116,35 @@ public class ThanhToanActivity extends AppCompatActivity {
     }
 
     private void pushNotiToUser() {
-        String token ="f_K9XPusQcKrc3vCBc5VgN:APA91bHE8Za1Cc_CsFPWh5Yo4nRRSMW86aEldQ9dXMm54xUPXjJaqFX545GMSP1nDjSVVMtjQLPyu8ZLvOhTZHHAVIT5-zoNA5HgguLQfKGVrJlCzbOx51wSzJ2buXKK5JZRIaeoGPoW";
-        Map<String,String> data = new HashMap<>();
-        data.put("title","Thong bao khach hang");
-        data.put("body", "Don hang moi vua duoc dat, kiem tra don hang");
-        NotiSendData notiSendData = new NotiSendData(token,data);
-        apiPushNotification = RetrofitClientNoti.getInstance().create(APIPushNotification.class);
-        compositeDisposable.add(apiPushNotification.sendNotification(notiSendData)
+        //gettoken
+        compositeDisposable.add(apiBanHang.gettoken(1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        notiResponse -> {
+                        userModel -> {
+                            if(userModel.isSuccess()){
+                                for(int i=0;i<userModel.getResult().size();i++){
+                                    Map<String,String> data = new HashMap<>();
+                                    data.put("title","Thong bao");
+                                    data.put("body", "Ban co don hang moi");
+                                    NotiSendData notiSendData = new NotiSendData(userModel.getResult().get(i).getToken(),data);
+                                    apiPushNotification = RetrofitClientNoti.getInstance().create(APIPushNotification.class);
+                                    compositeDisposable.add(apiPushNotification.sendNotification(notiSendData)
+                                            .subscribeOn(Schedulers.io())
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribe(
+                                                    notiResponse -> {
 
+                                                    },
+                                                    throwable -> {
+                                                        Log.d("logg",throwable.getMessage());
+                                                    }
+                                            ));
+                                }
+                            }
                         },
                         throwable -> {
-                            Log.d("logg",throwable.getMessage());
+                            Log.d("loggg",throwable.getMessage());
                         }
                 ));
     }
