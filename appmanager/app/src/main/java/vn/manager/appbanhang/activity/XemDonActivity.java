@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,15 +20,20 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import vn.manager.appbanhang.model.DonHang;
 import vn.manager.appbanhang.model.EventBus.DonHangEvent;
+import vn.manager.appbanhang.model.NotiSendData;
+import vn.manager.appbanhang.retrofit.APIPushNotification;
 import vn.manager.appbanhang.retrofit.ApiBanHang;
 import vn.manager.appbanhang.retrofit.RetrofitClient;
+import vn.manager.appbanhang.retrofit.RetrofitClientNoti;
 import vn.name.appbanhang.R;
 import vn.manager.appbanhang.adapter.DonHangAdapter;
 import vn.manager.appbanhang.utils.Utils;
@@ -140,12 +146,68 @@ public class XemDonActivity extends AppCompatActivity {
                         messageModel -> {
                             getOrder();
                             dialog.dismiss();
+                            pushNotiToUser();
                         },
                         throwable -> {
 
                         }
                 ));
 
+    }
+
+    private void pushNotiToUser() {
+        //gettoken
+        compositeDisposable.add(apiBanHang.gettoken(0,donHang.getIduser())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        userModel -> {
+                            if(userModel.isSuccess()){
+                                for(int i=0;i<userModel.getResult().size();i++){
+                                    Map<String,String> data = new HashMap<>();
+                                    data.put("title","Thong bao");
+                                    data.put("body", trangThaiDon(tinhtrang));
+                                    NotiSendData notiSendData = new NotiSendData(userModel.getResult().get(i).getToken(),data);
+                                    APIPushNotification apiPushNotification = RetrofitClientNoti.getInstance().create(APIPushNotification.class);
+                                    compositeDisposable.add(apiPushNotification.sendNotification(notiSendData)
+                                            .subscribeOn(Schedulers.io())
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribe(
+                                                    notiResponse -> {
+
+                                                    },
+                                                    throwable -> {
+                                                        Log.d("logg",throwable.getMessage());
+                                                    }
+                                            ));
+                                }
+                            }
+                        },
+                        throwable -> {
+                            Log.d("loggg",throwable.getMessage());
+                        }
+                ));
+    }
+    private String trangThaiDon(int status){
+        String result="";
+        switch (status){
+            case 0:
+                result="Đơn hàng đang được xử lý";
+                break;
+            case 1:
+                result="Đơn hàng đã chấp nhận";
+                break;
+            case 2:
+                result="Đơn hàng đã giao cho đơn vị vận chuyển";
+                break;
+            case 3:
+                result="Thành công";
+                break;
+            case 4:
+                result="Đơn hàng đã hủy";
+                break;
+        }
+        return result;
     }
 
     @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
