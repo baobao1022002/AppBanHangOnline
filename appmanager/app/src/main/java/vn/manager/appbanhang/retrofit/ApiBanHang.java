@@ -104,13 +104,19 @@ public interface ApiBanHang {
             @Field("loai") int idloai,
             @Field("id") int id
     );
-
+    @POST("gettoken.php")
+    @FormUrlEncoded
+    Observable<UserModel> gettoken(
+            @Field("status") int status,
+            @Field("iduser") int iduser
+    );
     @POST("updatetoken.php")
     @FormUrlEncoded
     Observable<MessageModel> updateToken(
             @Field("id") int id,
             @Field("token") String token
     );
+
 
     @POST("updateorder.php")
     @FormUrlEncoded
