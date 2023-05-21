@@ -4,11 +4,15 @@ public class MessageModel {
     boolean success;
     String message;
     String name;
+    String iddonhang;
 
-    public MessageModel(boolean success, String message, String name) {
-        this.success = success;
-        this.message = message;
-        this.name = name;
+
+    public String getIddonhang() {
+        return iddonhang;
+    }
+
+    public void setIddonhang(String iddonhang) {
+        this.iddonhang = iddonhang;
     }
 
     public boolean isSuccess() {

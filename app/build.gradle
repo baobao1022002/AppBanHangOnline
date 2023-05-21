@@ -65,4 +65,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
     //lottie
     implementation 'com.airbnb.android:lottie:4.2.2'
+    //momo
+    implementation 'com.github.momo-wallet:mobile-sdk:1.0.7'
 }
