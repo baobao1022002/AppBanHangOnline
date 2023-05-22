@@ -210,16 +210,17 @@ public class ThanhToanActivity extends AppCompatActivity {
                             .subscribe(
                                     userModel -> {
                                         pushNotiToUser();
-                                        Toast.makeText(getApplicationContext(), "Thanh cong", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
                                         Utils.mangmuahang.clear();
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
                                     },
                                     throwable -> {
                                         Toast.makeText(getApplicationContext(), "Thanh cong", Toast.LENGTH_SHORT).show();
                                     }
                             ));
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(intent);
-                    finish();
+
 
                 }
             }
