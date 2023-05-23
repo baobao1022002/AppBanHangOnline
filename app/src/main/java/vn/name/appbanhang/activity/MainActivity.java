@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     SanPhamMoiAdapter spAdapter;
     NotificationBadge badge;
     FrameLayout frameLayout;
-    ImageView imgsearch;
+    ImageView imgsearch, imageMess;
 
 
     @Override
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
         Paper.init(this);
-        if(Paper.book().read("user") != null ){
+        if (Paper.book().read("user") != null) {
             User user = Paper.book().read("user");
             Utils.user_current = user;
         }
@@ -95,12 +95,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void getToken(){
+    private void getToken() {
         FirebaseMessaging.getInstance().getToken()
                 .addOnSuccessListener(new OnSuccessListener<String>() {
                     @Override
                     public void onSuccess(String s) {
-                        if (!TextUtils.isEmpty(s)){
+                        if (!TextUtils.isEmpty(s)) {
                             compositeDisposable.add(apiBanHang.updateToken(Utils.user_current.getId(), s)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
@@ -117,6 +117,22 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+        compositeDisposable.add(apiBanHang.gettoken(1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        userModel -> {
+                            if (userModel.isSuccess()) {
+                                Utils.ID_RECEIVED = String.valueOf(userModel.getResult().get(0).getId());
+                            }
+                        },
+                        throwable -> {
+                            Log.d("log", throwable.getMessage());
+                        }
+                )
+        );
+
     }
 
     private void getEventClick() {
@@ -181,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                         loaiSpModel -> {
                             if (loaiSpModel.isSuccess()) {
                                 mangLoaiSp = loaiSpModel.getResult();
-                                mangLoaiSp.add(new LoaiSp("Đăng xuất",""));
+                                mangLoaiSp.add(new LoaiSp("Đăng xuất", ""));
                                 //khoi tao adapter
                                 loaiSpAdapter = new LoaiSpAdapter(getApplicationContext(), mangLoaiSp);
                                 listViewManHinhChinh.setAdapter(loaiSpAdapter);
@@ -226,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void Anhxa() {
         imgsearch = findViewById(R.id.imgsearch);
+        imageMess = findViewById(R.id.image_mess);
         toolbar = findViewById(R.id.toobarmanhinhchinh);
         viewFlipper = findViewById(R.id.viewlipper);
         recyclerViewManHinhChinh = findViewById(R.id.recycleView);
@@ -266,6 +283,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        imageMess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
