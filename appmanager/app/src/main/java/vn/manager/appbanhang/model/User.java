@@ -9,6 +9,10 @@ public class User {
     String uid;
     String token;
 
+    public User(){
+
+    }
+
     public int getId() {
         return id;
     }
