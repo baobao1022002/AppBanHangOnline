@@ -148,8 +148,13 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(chat);
 
                         break;
-
                     case 8:
+
+                        Intent tk = new Intent(getApplicationContext(), ThongKeActivity.class);
+                        startActivity(tk);
+
+                        break;
+                    case 9:
                         Paper.book().delete("user");
                         FirebaseAuth.getInstance().signOut();
                         Intent dangnhap = new Intent(getApplicationContext(), DangNhapActivity.class);
@@ -192,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
                                 mangLoaiSp = loaiSpModel.getResult();
                                 mangLoaiSp.add(new LoaiSp("Quản lí",""));
                                 mangLoaiSp.add(new LoaiSp("Chat",""));
+                                mangLoaiSp.add(new LoaiSp("Thống kê",""));
                                 mangLoaiSp.add(new LoaiSp("Đăng xuất",""));
                                 //khoi tao adapter
                                 loaiSpAdapter = new LoaiSpAdapter(getApplicationContext(), mangLoaiSp);

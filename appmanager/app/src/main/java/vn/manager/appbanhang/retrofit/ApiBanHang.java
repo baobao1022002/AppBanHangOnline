@@ -14,6 +14,7 @@ import vn.manager.appbanhang.model.DonHangModel;
 import vn.manager.appbanhang.model.LoaiSpModel;
 import vn.manager.appbanhang.model.MessageModel;
 import vn.manager.appbanhang.model.SanPhamMoiModel;
+import vn.manager.appbanhang.model.ThongKeModel;
 import vn.manager.appbanhang.model.UserModel;
 
 public interface ApiBanHang {
@@ -22,6 +23,9 @@ public interface ApiBanHang {
 
     @GET("getspmoi.php")
     Observable<SanPhamMoiModel> getSpMoi();
+
+    @GET("thongke.php")
+    Observable<ThongKeModel> getthongke();
 
     @POST("chitiet.php")
     @FormUrlEncoded

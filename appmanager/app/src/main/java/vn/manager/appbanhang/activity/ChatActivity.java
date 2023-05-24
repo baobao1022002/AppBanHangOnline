@@ -1,4 +1,4 @@
-package vn.name.appbanhang.activity;
+package vn.manager.appbanhang.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,15 +22,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.SimpleFormatter;
 
+import vn.manager.appbanhang.adapter.ChatAdapter;
+import vn.manager.appbanhang.model.ChatMessage;
+import vn.manager.appbanhang.utils.Utils;
 import vn.name.appbanhang.R;
-import vn.name.appbanhang.adapter.ChatAdapter;
-import vn.name.appbanhang.model.ChatMessage;
-import vn.name.appbanhang.utils.Utils;
 
 public class ChatActivity extends AppCompatActivity {
-
+    int iduser;
+    String iduser_str;
     RecyclerView recyclerView;
     ImageView imgSend;
     EditText edtMess;
@@ -38,25 +38,16 @@ public class ChatActivity extends AppCompatActivity {
     ChatAdapter adapter;
     List<ChatMessage> list;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        iduser=getIntent().getIntExtra("id",0);//id nguoi nhan
+        iduser_str=String.valueOf(iduser);
         initView();
         initControl();
         listenMess();
-        insertUser();
     }
-
-    private void insertUser() {
-        HashMap<String,Object> user = new HashMap<>();
-        user.put("id",Utils.user_current.getId());
-        user.put("username",Utils.user_current.getUsername());
-        db.collection("users").document(String.valueOf(Utils.user_current.getId()))
-                .set(user);
-    }
-
     private void initControl() {
         imgSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +64,7 @@ public class ChatActivity extends AppCompatActivity {
         } else {
             HashMap<String, Object> message = new HashMap<>();
             message.put(Utils.SENDID, String.valueOf(Utils.user_current.getId()));
-            message.put(Utils.RECEIVEDID, Utils.ID_RECEIVED);
+            message.put(Utils.RECEIVEDID, iduser_str);
             message.put(Utils.MESS, str_mess);
             message.put(Utils.DATETIME, new Date());
             db.collection(Utils.PATH_CHAT).add(message);
@@ -83,10 +74,11 @@ public class ChatActivity extends AppCompatActivity {
     private void listenMess(){
         db.collection(Utils.PATH_CHAT)
                 .whereEqualTo(Utils.SENDID, String.valueOf(Utils.user_current.getId()))
-                .whereEqualTo(Utils.RECEIVEDID,Utils.ID_RECEIVED)
+                .whereEqualTo(Utils.RECEIVEDID,iduser_str)
                 .addSnapshotListener(eventListener);
+
         db.collection(Utils.PATH_CHAT)
-                .whereEqualTo(Utils.SENDID,Utils.ID_RECEIVED )
+                .whereEqualTo(Utils.SENDID,iduser_str)
                 .whereEqualTo(Utils.RECEIVEDID, String.valueOf(Utils.user_current.getId()))
                 .addSnapshotListener(eventListener);
 
