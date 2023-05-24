@@ -1,6 +1,7 @@
 package vn.manager.appbanhang.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import vn.manager.appbanhang.Interface.ItemClickListener;
+import vn.manager.appbanhang.activity.ChatActivity;
 import vn.manager.appbanhang.model.User;
 import vn.name.appbanhang.R;
 
@@ -34,8 +37,20 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-    holder.txtId.setText(userList.get(position).getId()+ " ");
-    holder.txtUser.setText(userList.get(position).getUsername());
+        User user=userList.get(position);
+        holder.txtId.setText(user.getId()+ " ");
+        holder.txtUser.setText(user.getUsername());
+        holder.setItemClickListener(new ItemClickListener() {
+            @Override
+            public void onClick(View view, int pos, boolean isLongClick) {
+                if(!isLongClick){
+                    Intent intent=new Intent(context, ChatActivity.class);
+                    intent.putExtra("id",user.getId());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            }
+        });
 
     }
 
@@ -44,13 +59,24 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
         return userList.size();
     }
 
-    public class MyViewHolder extends  RecyclerView.ViewHolder {
+    public class MyViewHolder extends  RecyclerView.ViewHolder implements View.OnClickListener {
         TextView txtId, txtUser;
+        ItemClickListener itemClickListener;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             txtId = itemView.findViewById(R.id.iduser);
             txtUser = itemView.findViewById(R.id.username);
+            itemView.setOnClickListener(this);
+        }
+
+        public void setItemClickListener(ItemClickListener itemClickListener) {
+            this.itemClickListener = itemClickListener;
+        }
+
+        @Override
+        public void onClick(View view) {
+            itemClickListener.onClick(view,getAdapterPosition(),false);
         }
     }
 }
