@@ -77,10 +77,11 @@ public class DangNhapActivity extends AppCompatActivity {
                     Paper.book().write("pass", str_pass);
 
                     if (user != null) {
-                        // user da co dang nhap firebase
+                        // user da co dang nhap firebase, chua sign out
                         dangNhap(str_email, str_pass);
                     } else {
                         // user da signout
+                        //co 2 noi quan ly mat khau 01 la firebase, 2 la hosting
                         firebaseAuth.signInWithEmailAndPassword(str_email, str_pass)
                                 .addOnCompleteListener(DangNhapActivity.this, new OnCompleteListener<AuthResult>() {
                                     @Override

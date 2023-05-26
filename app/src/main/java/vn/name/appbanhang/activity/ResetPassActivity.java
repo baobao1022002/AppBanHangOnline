@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -41,34 +43,18 @@ ProgressBar progressBar;
             public void onClick(View view) {
                 String str_email = email.getText().toString().trim();
                 if(TextUtils.isEmpty(str_email)){
-                    Toast.makeText(getApplicationContext(),"Vui lòng nhập email", Toast.LENGTH_SHORT)
+                    Toast.makeText(getApplicationContext(),"Bạn chưa nhập email", Toast.LENGTH_SHORT)
                             .show();
                 }else {
-
-
-                    compositeDisposable.add(apiBanHang.resetPass(str_email)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            . subscribe(
-                                    userModel -> {
-                                        if(!(userModel.isSuccess())){
-                                            Toast.makeText(getApplicationContext(),userModel.getMessage(), Toast.LENGTH_SHORT).show();
-
-                                        }else{
-                                            Intent intent = new Intent(getApplicationContext(),DangNhapActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                            Toast.makeText(getApplicationContext(),userModel.getMessage(), Toast.LENGTH_LONG).show();
-
-                                        }
-
-                                    },
-                                    throwable -> {
-                                        Toast.makeText(getApplicationContext(),throwable.getMessage(), Toast.LENGTH_SHORT).show();
-
-                                    }
-
-                            ));
+                    progressBar.setVisibility(View.VISIBLE); //sua
+                    //reset pass on firebase
+                    FirebaseAuth.getInstance().sendPasswordResetEmail(str_email)
+                            .addOnCompleteListener(task -> {
+                                if(task.isSuccessful()){
+                                    Toast.makeText(getApplicationContext(), "Kiểm tra Email của bạn", Toast.LENGTH_SHORT).show();
+                                }
+                                finish();
+                            });
                 }
             }
         });
