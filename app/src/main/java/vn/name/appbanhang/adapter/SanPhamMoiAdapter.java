@@ -20,6 +20,7 @@ import vn.name.appbanhang.Interface.ItemClickListener;
 import vn.name.appbanhang.R;
 import vn.name.appbanhang.activity.ChiTietActivity;
 import vn.name.appbanhang.model.SanPhamMoi;
+import vn.name.appbanhang.utils.Utils;
 
 public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.MyViewHolder> {
     Context context;
@@ -44,7 +45,12 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.My
         holder.txtten.setText(sanPhamMoi.getTensp());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         holder.txtgia.setText( "Giá: "+ decimalFormat.format(Double.parseDouble(sanPhamMoi.getGiasp())) + "Đ");
-        Glide.with(context).load(sanPhamMoi.getHinhanh()).into(holder.imghinhanh);
+
+        if(sanPhamMoi.getHinhanh().contains("http")){
+            Glide.with(context).load(sanPhamMoi.getHinhanh()).into(holder.imghinhanh);
+        }else{
+            Glide.with(context).load(Utils.BASE_URL+"images/" +sanPhamMoi.getHinhanh()).into(holder.imghinhanh);
+        }
         holder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int pos, boolean isLongClick) {
