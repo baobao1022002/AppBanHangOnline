@@ -8,7 +8,7 @@
     tools:context="vn.manager.appbanhang.activity.ThemSPActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toobar"
-        app:title="Thêm sản phẩm"
+        app:title="Sửa/Thêm sản phẩm"
         android:background="#B2B4C1"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"

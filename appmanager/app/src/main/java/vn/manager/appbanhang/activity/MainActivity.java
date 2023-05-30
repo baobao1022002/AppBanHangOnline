@@ -195,10 +195,10 @@ public class MainActivity extends AppCompatActivity {
                         loaiSpModel -> {
                             if (loaiSpModel.isSuccess()) {
                                 mangLoaiSp = loaiSpModel.getResult();
-                                mangLoaiSp.add(new LoaiSp("Quản lí",""));
-                                mangLoaiSp.add(new LoaiSp("Chat",""));
-                                mangLoaiSp.add(new LoaiSp("Thống kê",""));
-                                mangLoaiSp.add(new LoaiSp("Đăng xuất",""));
+                                mangLoaiSp.add(new LoaiSp("Quản lí","https://cdn-icons-png.flaticon.com/512/1802/1802979.png"));
+                                mangLoaiSp.add(new LoaiSp("Chat","https://cdn-icons-png.flaticon.com/512/2665/2665038.png"));
+                                mangLoaiSp.add(new LoaiSp("Thống kê","https://midesk.vn/public/images/feature/1541650752_icon-04.png"));
+                                mangLoaiSp.add(new LoaiSp("Đăng xuất","https://banner2.cleanpng.com/20191116/rqt/transparent-login-icon-logout-icon-5dcfef94516950.3632820915739083723335.jpg"));
                                 //khoi tao adapter
                                 loaiSpAdapter = new LoaiSpAdapter(getApplicationContext(), mangLoaiSp);
                                 listViewManHinhChinh.setAdapter(loaiSpAdapter);
