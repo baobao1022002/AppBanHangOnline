@@ -8,7 +8,7 @@
     tools:context="vn.manager.appbanhang.activity.QuanLiActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toobar"
-        app:title="Điện thoại"
+        app:title="Quản lí"
         android:background="#B2B4C1"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
@@ -25,7 +25,8 @@
         android:id="@+id/recycleview_ql"
         android:layout_margin="5dp"
         app:layout_constraintTop_toBottomOf="@id/toobar"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="0dp"/>
+        android:layout_height="0dp"></androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>

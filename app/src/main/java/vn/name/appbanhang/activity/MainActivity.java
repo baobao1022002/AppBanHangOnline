@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                         loaiSpModel -> {
                             if (loaiSpModel.isSuccess()) {
                                 mangLoaiSp = loaiSpModel.getResult();
-                                mangLoaiSp.add(new LoaiSp("Đăng xuất", ""));
+                                mangLoaiSp.add(new LoaiSp("Đăng xuất", "https://banner2.cleanpng.com/20191116/rqt/transparent-login-icon-logout-icon-5dcfef94516950.3632820915739083723335.jpg"));
                                 //khoi tao adapter
                                 loaiSpAdapter = new LoaiSpAdapter(getApplicationContext(), mangLoaiSp);
                                 listViewManHinhChinh.setAdapter(loaiSpAdapter);

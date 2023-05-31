@@ -20,7 +20,7 @@
             android:height="48dp"
             android:layout_weight="8"
             android:id="@+id/edtinputtext"
-            android:hint="noi dung chat"
+            android:hint="Messing..."
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
