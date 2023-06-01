@@ -12,7 +12,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="#B2B4C1"
         app:layout_constraintTop_toTopOf="parent"
-        app:title=""></androidx.appcompat.widget.Toolbar>
+        app:title="Tìm kiếm"></androidx.appcompat.widget.Toolbar>
 
     <EditText
         android:hint="Nhập sản phẩm cần tìm"

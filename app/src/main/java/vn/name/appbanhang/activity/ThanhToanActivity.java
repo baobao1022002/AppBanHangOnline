@@ -55,10 +55,10 @@ public class ThanhToanActivity extends AppCompatActivity {
     private String amount = "10000";
     private String fee = "0";
     int environment = 0;//developer default
-    private String merchantName = "HoangNgoc";
+    private String merchantName = "DI DONG VIET NAM";
     private String merchantCode = "MOMOC2IC20220510";
     private String merchantNameLabel = "HoangNgoc";
-    private String description = "mua hàng online";
+    private String description = "Thanh toán mua hàng online";
 
 
     @Override
