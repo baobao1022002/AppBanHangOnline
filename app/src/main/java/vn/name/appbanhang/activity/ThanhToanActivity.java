@@ -271,8 +271,8 @@ public class ThanhToanActivity extends AppCompatActivity {
                             if(userModel.isSuccess()){
                                 for(int i=0;i<userModel.getResult().size();i++){
                                     Map<String,String> data = new HashMap<>();
-                                    data.put("title","Thong bao");
-                                    data.put("body", "Ban co don hang moi");
+                                    data.put("title","Thông báo");
+                                    data.put("body", "Bạn có một đơn hàng mới");
                                     NotiSendData notiSendData = new NotiSendData(userModel.getResult().get(i).getToken(),data);
                                     apiPushNotification = RetrofitClientNoti.getInstance().create(APIPushNotification.class);
                                     compositeDisposable.add(apiPushNotification.sendNotification(notiSendData)

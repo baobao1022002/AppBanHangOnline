@@ -165,7 +165,7 @@ public class XemDonActivity extends AppCompatActivity {
                             if(userModel.isSuccess()){
                                 for(int i=0;i<userModel.getResult().size();i++){
                                     Map<String,String> data = new HashMap<>();
-                                    data.put("title","Thong bao");
+                                    data.put("title","Thông báo ");
                                     data.put("body", trangThaiDon(tinhtrang));
                                     NotiSendData notiSendData = new NotiSendData(userModel.getResult().get(i).getToken(),data);
                                     APIPushNotification apiPushNotification = RetrofitClientNoti.getInstance().create(APIPushNotification.class);
@@ -205,6 +205,7 @@ public class XemDonActivity extends AppCompatActivity {
                 break;
             case 4:
                 result="Đơn hàng đã hủy";
+
                 break;
         }
         return result;

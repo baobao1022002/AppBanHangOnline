@@ -42,7 +42,7 @@ public class FirebaseMessagerReceive extends FirebaseMessagingService {
         builder = builder.setContent(customView(title,body));
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel notificationChannel = new NotificationChannel(channelId, "Di dong Viet Nam",NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel notificationChannel = new NotificationChannel(channelId, "Di Dong Viet Nam",NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(notificationChannel);
 
         }
