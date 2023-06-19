@@ -41,9 +41,17 @@ public class DienThoaiActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dien_thoai);
+
         apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
         loai = getIntent().getIntExtra("loai", 1);
+        switch (loai ){
+            case 1:
+                setContentView(R.layout.activity_dien_thoai);
+                break;
+            case 2:
+                setContentView(R.layout.activity_laptop);
+        }
+
 
         AnhXa();
         ActionToolBar();
